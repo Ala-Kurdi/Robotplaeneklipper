@@ -46,7 +46,7 @@ struct mosquitto* setup_mqtt(const std::string& host, int port) {
         return nullptr;
     }
 
-    mosquitto_connect_set_callback(mosq, on_connect);
+    mosquitto_connect_callback_set(mosq, on_connect);
     mosquitto_message_callback_set(mosq, on_message);
 
     if (mosquitto_connect(mosq, host.c_str(), port, 60) != MOSQ_ERR_SUCCESS) {
@@ -65,8 +65,9 @@ void send_telemetry(struct mosquitto* mosq, double distance_cm, const std::strin
 
     // Byg en simpel JSON-streng
     std::string payload = "{\"distance_cm\": " + std::to_string(distance_cm) + 
-                          ", \"obstacle\": \"" + obstacle_status + 
-                          "\", \"running\": " + (g_is_running ? "true" : "false") + "}";
+                            ", \"checkpoint\": " + std::to_string(current_checkpoint) +
+                            ", \"obstacle\": \"" + obstacle_status + 
+                            "\", \"running\": " + (is_running ? "true" : "false") + "}";
 
     mosquitto_publish(mosq, NULL, "robot/telemetry", payload.length(), payload.c_str(), 1, false);
 }
