@@ -1,0 +1,15 @@
+{
+  "mqtt": {
+    "host": "192.168.106.10",
+    "port": 1883
+  },
+  "map": {
+    "width_cm": 100.0,
+    "height_cm": 100.0,
+    "grid_cell_size_cm": 10.0
+  },
+  "robot": {
+    "wheel_diameter_cm": 6.5,
+    "pulses_per_rev": 22.0
+  }
+}

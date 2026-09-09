@@ -13,7 +13,9 @@ SRCS = $(SRC_DIR)/main.cpp \
        $(SRC_DIR)/motor.cpp \
        $(SRC_DIR)/network.cpp \
        $(SRC_DIR)/lidar.cpp \
-       $(SRC_DIR)/encoders.cpp
+       $(SRC_DIR)/encoders.cpp \
+       $(SRC_DIR)/navigation.cpp \
+       $(SRC_DIR)/config.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
