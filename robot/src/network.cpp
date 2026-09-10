@@ -53,7 +53,7 @@ struct mosquitto* setup_mqtt(const std::string& host, int port) {
     struct mosquitto* mosq = mosquitto_new("robot_client", true, NULL);
     if (!mosq) return nullptr;
 
-    mosquitto_connect_set_callback(mosq, on_connect);
+    mosquitto_connect_callback_set(mosq, on_connect);
     mosquitto_message_callback_set(mosq, on_message);
 
     if (mosquitto_connect(mosq, host.c_str(), port, 60) != MOSQ_ERR_SUCCESS) {

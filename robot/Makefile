@@ -32,3 +32,6 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
 # Slet kompilerede filer
 clean:
 	rm -f $(SRC_DIR)/*.o $(TARGET)
+
+# Fortæller Make at 'all' og 'clean' er kommandoer og ikke filer
+.PHONY: all clean
