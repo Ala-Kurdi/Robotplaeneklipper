@@ -1,6 +1,6 @@
 # Compiler og flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -O2 -Iinclude
+CXXFLAGS = -Wall -std=c++17 -O2 -Iinclude -pthread
 
 # Navn på det færdige program
 TARGET = robot_app
@@ -23,7 +23,7 @@ OBJS = $(SRCS:.cpp=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $(TARGET) -lmosquitto
+	$(CXX) $(OBJS) -o $(TARGET) -lmosquitto -lgpiod -pthread
 
 # Regel for at kompilere .cpp til .o
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp

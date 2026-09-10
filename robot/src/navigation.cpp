@@ -15,7 +15,7 @@ static int visited_cells = 0;
 static int last_checkpoint_triggered = 0;
 
 void init_navigation() {
-    current_pos = {0.0, 0.0};
+    current_pos = {1.0, 1.0};
     current_heading = 0;
     obstacle_encounter_count = 0;
     visited_cells = 0;
@@ -69,7 +69,10 @@ void update_heading(const std::string& turn_direction) {
 }
 
 bool is_at_boundary() {
-    return (current_pos.x >= MAP_MAX_X || current_pos.y >= MAP_MAX_Y || current_pos.x <= 0 || current_pos.y <= 0);
+    return (current_pos.x <= 0.0 ||
+            current_pos.y <= 0.0 ||
+            current_pos.x >= MAP_MAX_X ||
+            current_pos.y >= MAP_MAX_Y);
 }
 
 void register_obstacle_hit() { obstacle_encounter_count++; }

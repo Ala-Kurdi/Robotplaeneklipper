@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <termios.h>
 #include "../include/config.hpp"
 #include "../include/motor.hpp"
 #include "../include/lidar.hpp"
@@ -30,9 +31,14 @@ int main() {
     auto cfg = get_config();
 
     init_navigation();
+    init_encoders();
     reset_encoders();
 
     int lidar_fd = open_lidar_port();
+    
+    if (lidar_fd >= 0) {
+      tcflush(lidar_fd, TCIFLUSH); // Tømmer alt umodtaget støj-data i modtage-bufferen
+    }
     struct mosquitto* mqtt_client = setup_mqtt(cfg.mqtt_host, cfg.mqtt_port);
 
     double last_dist = get_average_distance_cm();
@@ -65,7 +71,16 @@ int main() {
             }
 
             std::string obstacle = check_obstacle_cpp(lidar_fd);
+            
+            bool boundary = is_at_boundary();
 
+            Vector2D pos = get_position();
+            int heading = get_heading();
+            std::cout << "[TEST] Pos: (" << pos.x << " cm, " << pos.y << " cm) "
+                      << "| Retning: " << heading << "° "
+                      << "| Hindring: '" << obstacle << "' "
+                      << "| Grænse: " << boundary << std::endl;
+            
             if (mqtt_client) {
                 Vector2D pos = get_position();
                 send_telemetry(mqtt_client, pos.x, pos.y, get_heading(), 
@@ -84,7 +99,9 @@ int main() {
                 else if (obstacle == "right") turn_90_degrees("left");
                 else if (obstacle == "center") {
                     turn_90_degrees("right");
-                    turn_90_degrees("right");
+                }
+                if (lidar_fd >= 0) {
+                  tcflush(lidar_fd, TCIFLUSH);
                 }
                 last_dist = get_average_distance_cm();
             } 
